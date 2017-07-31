@@ -1,7 +1,7 @@
 Dim as Double xmin, xmax, ymin, ymax, r2, x0, y0, x, y, xt, rs, gs, bs
 Dim as UInteger xres, yres, niter, c, iter
 Dim as String inst
-Dim as UInteger col, brt
+Dim as UInteger col, brt, nrt, red, green, blue
 Dim as UInteger i,j, fj 
 
 REM These are fixed values.
@@ -47,9 +47,9 @@ If rs > 1 Then rs = 1
 If gs > 1 Then gs = 1
 If bs > 1 Then bs = 1
 
-If rs < 0 Then rs = 0
-If gs < 0 Then gs = 0
-If bs < 0 Then bs = 0
+If rs < -1 Then rs = -1
+If gs < -1 Then gs = -1
+If bs < -1 Then bs = -1
 
 REM 640x480 in 32 bit colour.
 Screen 18, 32
@@ -74,7 +74,23 @@ For i = 0 To 639
 
 REM Get brightness and generate colour  
       brt = ((niter - iter)/niter)*256
-      col = Rgb(rs*brt,gs*brt,bs*brt)
+      nrt = ((iter-1)/niter)*256
+      if (rs > 0) then
+        red = rs * brt
+      else 
+        red = abs(rs) * nrt
+      end if
+      if (bs > 0) then
+        blue = bs * brt
+      else 
+        blue = abs(bs) * nrt
+      end if
+      if (gs > 0) then
+        green = gs * brt
+      else 
+        green = abs(gs) * nrt
+      end if
+      col = Rgb(red,green,blue)
 
 REM Flip image vertically.
       fj = (yres -1) - j
